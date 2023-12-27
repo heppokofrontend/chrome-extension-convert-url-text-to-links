@@ -4,6 +4,8 @@ English follows.
 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
+![](./images/main.png)
+
 文中の URL をリンクにするだけのブラウザ拡張です。
 
 ## ダウンロード
