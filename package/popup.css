@@ -1,0 +1,225 @@
+:root {
+  --color-outline: #000;
+  --color-h1-text: #333;
+  --color-h1-bg: #ddd;
+  --color-background: #f1f1f1;
+  --color-background-secondary: #fff;
+  --color-label-text: #000;
+  --color-label-bg: #dfdfdf;
+  --color-checkbox-border: #e1e1e1;
+  --color-danger-title-text: inherit;
+  --color-danger-title-font-weight: normal;
+  --color-danger-title-bg: #ff7c7c;
+  --color-danger-label-bg: #f1f1f1;
+  --color-hint: #446ca9;
+  --color-dialog-text: #333;
+  --color-dialog-background: #fff;
+  --border-details: 1px solid #ff7c7c;
+  --border-top-details-content: 0;
+  --border-bottom-h1: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-outline: #fff;
+    --color-h1-text: #898989;
+    --color-h1-bg: #202124;
+    --color-background: #292a2d;
+    --color-background-secondary: #202124;
+    --color-checkbox-border: #39393b;
+    --color-label-text: #ddd;
+    --color-label-bg: #515254;
+    --color-danger-title-text: #ff7c7c;
+    --color-danger-title-font-weight: bold;
+    --color-danger-title-bg: #202124;
+    --color-danger-label-bg: #414245;
+    --color-hint: #8ab4f8;
+    --color-dialog-text: #fff;
+    --color-dialog-background: #292a2d;
+    --border-details: 1px solid #703031;
+    --border-top-details-content: 2px solid #292a2d;
+    --border-bottom-h1: 1px solid #111;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-outline);
+}
+
+body {
+  width: 380px;
+  background: var(--color-background);
+}
+
+h1 {
+  padding: 10px 16px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--color-h1-text);
+  text-align: center;
+  white-space: pre-wrap;
+  background: var(--color-h1-bg);
+  border-bottom: var(--border-bottom-h1);
+}
+
+button {
+  font-size: 11px;
+  background: #42ccc0;
+  border: 0;
+  border-radius: 6px;
+}
+
+button:hover,
+button:focus {
+  opacity: 0.8;
+}
+
+.main {
+  padding: 20px 14px;
+}
+
+.description {
+  margin: 20px 0;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--color-label-text);
+  text-align: center;
+}
+
+/* -----------------------------------------------------------------------------
+ * Options
+ * -------------------------------------------------------------------------- */
+
+label {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  color: var(--color-label-text);
+  border-radius: 4px;
+}
+
+label .img {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  font-weight: bold;
+  color: #fff;
+  background: #008080;
+  border-radius: 4px;
+}
+
+label input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+label input:not(:checked) + span::before {
+  right: 49px;
+}
+
+label input:not(:checked) + span::after {
+  background-color: #cbd7db;
+}
+
+label input:focus-visible + span::after {
+  box-shadow: 0 0 3px rgb(0 0 0 / 60%) inset, 0 0 0 4px #e1e1e1, 0 0 0 6px var(--color-outline);
+}
+
+.hint {
+  display: flex;
+  font-size: 10px;
+  color: var(--color-hint);
+}
+
+.hint span[data-i18n] {
+  flex-grow: 1;
+  margin-left: 0.25em;
+  white-space: pre-wrap;
+}
+
+.children {
+  padding: 6px 0 20px 10px;
+}
+
+.children label {
+  padding: 12px 0 6px;
+}
+
+.options label {
+  padding: 12px 10px;
+  background-color: var(--color-label-bg);
+}
+
+.options p:not(:first-child) {
+  margin-top: 4px;
+}
+
+.label {
+  display: block;
+  padding: 0 80px 0 6px;
+}
+
+.label::before,
+.label::after {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  display: block;
+  margin: auto 0;
+  content: '';
+}
+
+.label::before {
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  background: #f0f3f4;
+  border-radius: 50%;
+  box-shadow: 0 0 3px rgb(0 0 0 / 60%);
+}
+
+[data-state='loaded'] .label::before {
+  transition: 0.2s right ease-out;
+}
+
+.label::after {
+  width: 72px;
+  height: 32px;
+  background: #42ccc0;
+  border-radius: 20px;
+  box-shadow: 0 0 3px rgb(0 0 0 / 60%) inset, 0 0 0 4px var(--color-checkbox-border);
+}
+
+[data-state='loaded'] .label::after {
+  transition: 0.2s background-color ease-out;
+}
+
+.options .hint {
+  padding-left: 4px;
+}
+
+.options .hint + .hint {
+  margin-top: 0;
+}
+
+.options .hint + p:not(.hint) {
+  margin-top: 12px;
+}
+
+.options .hint em {
+  font-style: normal;
+  font-weight: bold;
+  text-decoration: underline;
+}

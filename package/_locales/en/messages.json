@@ -1,0 +1,41 @@
+{
+  "extName": {
+    "message": "Convert URL Text to Links"
+  },
+  "extDesc": {
+    "message": "Convert URLs in the text into links."
+  },
+  "option_description": {
+    "message": "* To apply the settings, you need to reload the page."
+  },
+  "button_open_clipboards": {
+    "message": "Open all clipboard links at once"
+  },
+  "checkbox_observe": {
+    "message": "Observe page changes"
+  },
+  "desc_observe": {
+    "message": "There is a possibility that the web page may become slow."
+  },
+  "checkbox_enable_all_double_slash": {
+    "message": "Linkify URL-like text"
+  },
+  "desc_enable_all_double_slash": {
+    "message": "In addition to the two following content, \nit also accepts URLs other than non-http(s)."
+  },
+  "checkbox_enable_no_colon": {
+    "message": "Linkify text without colons"
+  },
+  "desc_enable_no_colon": {
+    "message": "Linkify http// and https//."
+  },
+  "checkbox_includes_ttp": {
+    "message": "Linkify h omission"
+  },
+  "desc_includes_ttp": {
+    "message": "Linkify ttp:// and ttps://."
+  },
+  "checkbox_use_new_tab": {
+    "message": "Open in a new tab."
+  }
+}

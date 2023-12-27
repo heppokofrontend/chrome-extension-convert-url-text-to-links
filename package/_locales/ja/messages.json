@@ -1,0 +1,41 @@
+{
+  "extName": {
+    "message": "文中のURLをリンクにするやつ"
+  },
+  "extDesc": {
+    "message": "文中のURLをリンクにします。"
+  },
+  "option_description": {
+    "message": "※ 設定を有効にするためにはページをリロードする必要があります。"
+  },
+  "button_open_clipboards": {
+    "message": "クリップボードのリンクをまとめて開く"
+  },
+  "checkbox_observe": {
+    "message": "ページの変化を監視する"
+  },
+  "desc_observe": {
+    "message": "Webページが重くなる可能性があります。"
+  },
+  "checkbox_enable_all_double_slash": {
+    "message": "URLっぽければリンク化する"
+  },
+  "desc_enable_all_double_slash": {
+    "message": "後述の2点の内容に加え、http以外も許容します"
+  },
+  "checkbox_enable_no_colon": {
+    "message": "コロン無しをリンク化する"
+  },
+  "desc_enable_no_colon": {
+    "message": "http// および https// をリンク化する"
+  },
+  "checkbox_includes_ttp": {
+    "message": "h省略をリンク化する"
+  },
+  "desc_includes_ttp": {
+    "message": "ttp:// および ttps:// をリンク化する"
+  },
+  "checkbox_use_new_tab": {
+    "message": "別タブで開く"
+  }
+}

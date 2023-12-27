@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "removeComments": true,
+    "target": "ESNext",
+    "outDir": "package"
+  },
+  "include": ["src/**/*"]
+}

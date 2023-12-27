@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title data-i18n="extName"></title>
+    <link rel="stylesheet" href="./popup.css" />
+    <script src="popup.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1 data-i18n="extName"></h1>
+
+      <div class="main">
+        <div class="safety">
+          <div class="options">
+            <p>
+              <label>
+                <span class="img">
+                  <img src="./images/observe.svg" width="16" height="16" alt="" />
+                </span>
+                <input
+                  type="checkbox"
+                  data-option-type="observeDOM"
+                  aria-describedby="desc-observe"
+                />
+                <span class="label" data-i18n="checkbox_observe">loading...</span>
+              </label>
+            </p>
+
+            <p class="hint" id="desc-observe">
+              <span aria-label="hint">💡</span>
+              <span data-i18n="desc_observe">loading...</span>
+            </p>
+
+            <p>
+              <label>
+                <span class="img">
+                  <img src="./images/danger.svg" width="16" height="16" alt="" />
+                </span>
+                <input
+                  type="checkbox"
+                  data-option-type="enableAllDoubleSlash"
+                  aria-describedby="desc-enableAllDoubleSlash"
+                />
+                <span class="label" data-i18n="checkbox_enable_all_double_slash">loading...</span>
+              </label>
+            </p>
+
+            <p class="hint" id="desc-enableAllDoubleSlash">
+              <span aria-label="hint">💡</span>
+              <span data-i18n="desc_enable_all_double_slash">loading...</span>
+            </p>
+          </div>
+
+          <div class="children">
+            <p>
+              <label>
+                <span class="img">
+                  <img src="./images/fix.svg" width="16" height="16" alt="" />
+                </span>
+                <input
+                  type="checkbox"
+                  data-option-type="enableTtp"
+                  aria-describedby="desc-enableTtp"
+                />
+                <span class="label" data-i18n="checkbox_includes_ttp">loading...</span>
+              </label>
+            </p>
+
+            <p class="hint" id="desc-enableTtp">
+              <span aria-label="hint">💡</span>
+              <span data-i18n="desc_includes_ttp">loading...</span>
+            </p>
+
+            <p>
+              <label>
+                <span class="img">
+                  <img src="./images/fix2.svg" width="16" height="16" alt="" />
+                </span>
+                <input
+                  type="checkbox"
+                  data-option-type="enableNoColon"
+                  aria-describedby="desc-enableNoColon"
+                />
+                <span class="label" data-i18n="checkbox_enable_no_colon">loading...</span>
+              </label>
+            </p>
+
+            <p class="hint" id="desc-enableNoColon">
+              <span aria-label="hint">💡</span>
+              <span data-i18n="desc_enable_no_colon">loading...</span>
+            </p>
+          </div>
+
+          <div class="options">
+            <p>
+              <label>
+                <span class="img">
+                  <img src="./images/new-tab.svg" width="16" height="16" alt="" />
+                </span>
+                <input
+                  type="checkbox"
+                  data-option-type="useNewTab"
+                  aria-describedby="desc-useNewTab"
+                  checked
+                />
+                <span class="label" data-i18n="checkbox_use_new_tab">loading...</span>
+              </label>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p class="description" data-i18n="option_description">loading...</p>
+    </main>
+
+    <dialog id="notice" role="dialog" aria-modal="true" tabindex="-1">
+      <p id="notice-text"></p>
+      <p>
+        <button type="button" id="notice-close">OK</button>
+      </p>
+    </dialog>
+
+    <dialog id="confirm" role="alertdialog" tabindex="-1">
+      <p id="confirm-text"></p>
+      <p id="dialog-buttons"></p>
+    </dialog>
+  </body>
+</html>
