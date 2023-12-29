@@ -83,6 +83,10 @@ const getRegExp = (() => {
   };
 })();
 
+const stopPropagation = (e: MouseEvent) => {
+  e.stopPropagation();
+};
+
 const convertToLink = ({
   textNode,
   enableTtp,
@@ -126,6 +130,7 @@ const convertToLink = ({
 
       a.href = url;
       a.textContent = urlString;
+      a.addEventListener('click', stopPropagation);
 
       if (useNewTab) {
         a.target = '_blank';
@@ -174,7 +179,7 @@ chrome.storage.local.get('saveData', (item) => {
     if (
       textNode instanceof Text &&
       !textNode.parentElement?.closest(
-        'a, button, summary, code, script, noscript, template, style, [contenteditable="true"], head',
+        'a, button, input, textarea, summary, code, script, noscript, template, style, [contenteditable="true"], head',
       )
     ) {
       convertToLink({
