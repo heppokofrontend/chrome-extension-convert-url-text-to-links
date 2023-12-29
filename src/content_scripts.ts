@@ -83,6 +83,10 @@ const getRegExp = (() => {
   };
 })();
 
+const stopPropagation = (e: MouseEvent) => {
+  e.stopPropagation();
+};
+
 const convertToLink = ({
   textNode,
   enableTtp,
@@ -126,6 +130,7 @@ const convertToLink = ({
 
       a.href = url;
       a.textContent = urlString;
+      a.addEventListener('click', stopPropagation);
 
       if (useNewTab) {
         a.target = '_blank';
