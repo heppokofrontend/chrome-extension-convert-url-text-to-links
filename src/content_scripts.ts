@@ -174,7 +174,7 @@ const narrowDownToOnlyTopLevelNodeLayer = (elements: Node[]) => {
 };
 
 chrome.storage.local.get('saveData', (item) => {
-  const saveData = item.saveData as SaveDataType;
+  const saveData = (item.saveData ?? {}) as SaveDataType;
   const convert = (textNode: Node) => {
     if (
       textNode instanceof Text &&
