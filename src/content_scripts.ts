@@ -18,7 +18,7 @@ const getTextNodes = (context?: Node) => {
 
 const key = `@heppokofrontend<${performance.now()}>`;
 const getRegExp = (() => {
-  // const regExp = /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+$/;
+  // const regExp = /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-@]+$/;
   // const regExp = new RegExp(`(${protocol}${colon}${common})`);
   // const regExpGlobal = new RegExp(
   //   `(${protocol}${colon}${common})`,
@@ -27,7 +27,7 @@ const getRegExp = (() => {
   // const regExpSplitPattern = new RegExp(
   //   `(${key}${protocol}${colon}${common})`,
   // );
-  const common = `\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-]+`;
+  const common = `\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-@]+`;
   const allDoubleSlash = {
     regExp: new RegExp(`([a-zA-Z]+:?${common})`),
     regExpGlobal: new RegExp(`([a-zA-Z]+:?${common})`, 'g'),
@@ -130,6 +130,7 @@ const convertToLink = ({
 
       a.href = url;
       a.textContent = urlString;
+      a.style.cssText = 'color: inherit !important;';
       a.addEventListener('click', stopPropagation);
 
       if (useNewTab) {
