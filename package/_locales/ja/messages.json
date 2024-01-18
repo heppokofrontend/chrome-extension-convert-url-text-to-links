@@ -1,9 +1,9 @@
 {
   "extName": {
-    "message": "文中のURLをリンクにするやつ"
+    "message": "クリックできない URL をクリックできるようにするやつ"
   },
   "extDesc": {
-    "message": "文中のURLをリンクにします。"
+    "message": "Webページ上のクリックできないURLをリンクにします。"
   },
   "option_description": {
     "message": "※ 設定を有効にするためにはページをリロードする必要があります。"
