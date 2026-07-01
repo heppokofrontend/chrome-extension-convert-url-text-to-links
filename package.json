@@ -1,49 +1,42 @@
 {
   "name": "chrome-extension-convert-url-text-to-links",
   "description": "Convert URLs in the text into links.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "heppokofrontend",
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  },
   "bugs": {
     "url": "https://github.com/heppokofrontend/chrome-extension-convert-url-text-to-links/issues"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.220",
-    "@typescript-eslint/eslint-plugin": "^5.58.0",
-    "@typescript-eslint/parser": "^5.58.0",
-    "eslint": "^8.38.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.8.0",
-    "gh-pages": "^3.2.3",
-    "http-server": "^14.1.1",
-    "prettier": "^2.8.7",
-    "stylelint": "^15.3.0",
-    "stylelint-config-recess-order": "^4.0.0",
-    "stylelint-config-standard": "^31.0.0",
-    "terser": "^5.7.1",
-    "ts-loader": "^9.2.3",
-    "typescript": "^5.0.4",
-    "uglify-js": "^3.17.4"
+    "@eslint/js": "10.0.1",
+    "@types/chrome": "0.2.0",
+    "esbuild": "0.28.1",
+    "eslint": "10.6.0",
+    "eslint-config-prettier": "10.1.8",
+    "globals": "17.7.0",
+    "prettier": "3.9.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.62.0"
   },
   "homepage": "https://github.com/heppokofrontend/chrome-extension-convert-url-text-to-links#readme",
-  "keywords": [],
   "license": "MIT",
-  "main": "index.js",
+  "packageManager": "npm@11.17.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/heppokofrontend/chrome-extension-convert-url-text-to-links.git"
   },
   "scripts": {
-    "build": "tsc --build",
-    "deploy": "gh-pages -d package -b package",
-    "dev": "tsc --watch",
-    "eslint": "eslint . --ext .js,.ts --fix",
-    "minify:content": "uglifyjs ./package/popup.js -o ./package/popup.js",
-    "postbuild": "yarn minify:content",
-    "predeploy": "yarn build",
-    "serve": "http-server ./ -o index.html",
-    "start": "yarn dev"
-  },
-  "dependencies": {
-    "yarn": "^1.22.21"
+    "build": "npm run typecheck && npm run build:content && npm run build:popup",
+    "build:content": "esbuild src/content_scripts.ts --bundle --minify --format=iife --target=chrome120 --outfile=package/content_scripts.js",
+    "build:popup": "esbuild src/popup.ts --bundle --minify --format=iife --target=chrome120 --outfile=package/popup.js",
+    "dev:content": "esbuild src/content_scripts.ts --bundle --format=iife --target=chrome120 --sourcemap=inline --outfile=package/content_scripts.js --watch",
+    "dev:popup": "esbuild src/popup.ts --bundle --format=iife --target=chrome120 --sourcemap=inline --outfile=package/popup.js --watch",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "lint": "eslint src",
+    "start": "npm run dev:content & npm run dev:popup",
+    "typecheck": "tsc"
   }
 }

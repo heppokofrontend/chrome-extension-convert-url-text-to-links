@@ -1,0 +1,84 @@
+Debug Test Text
+
+Plain text file (not Markdown), so nothing renders it into <a> or <code>
+before the extension gets a chance to process it. View this file's raw
+content in a browser tab (e.g. the GitHub "raw" view) and toggle the
+extension's popup settings to check each pattern.
+
+--- Regular URL ---
+
+https://heppokofrontend.dev
+
+--- No h ---
+
+ttps://heppokofrontend.dev
+
+ttp://heppokofrontend.dev
+
+--- No colon ---
+
+https//heppokofrontend.dev
+
+http//heppokofrontend.dev
+
+ttps//heppokofrontend.dev
+
+ttp//heppokofrontend.dev
+
+--- Other ---
+
+hoge//heppokofrontend.dev
+
+hoge://heppokofrontend.dev
+
+h ttp://heppokofrontend.dev
+
+h TTP://heppokofrontend.dev
+
+HTTP://heppokofrontend.dev
+
+--- Trailing punctuation: Regular URL + punctuation ---
+
+Here is a link with a trailing period at the end of the sentence https://heppokofrontend.dev.
+
+https://heppokofrontend.dev.
+
+https://heppokofrontend.dev,
+
+https://heppokofrontend.dev;
+
+https://heppokofrontend.dev:
+
+https://heppokofrontend.dev!
+
+https://heppokofrontend.dev?
+
+(see https://heppokofrontend.dev)
+
+[https://heppokofrontend.dev]
+
+{https://heppokofrontend.dev}
+
+https://heppokofrontend.dev...
+
+https://heppokofrontend.dev)!?
+
+--- Trailing punctuation: No h + punctuation ---
+
+ttp://heppokofrontend.dev.
+
+ttps://heppokofrontend.dev?
+
+--- Trailing punctuation: No colon + punctuation ---
+
+http//heppokofrontend.dev.
+
+https//heppokofrontend.dev,
+
+--- Trailing punctuation: Other + punctuation ---
+
+hoge://heppokofrontend.dev.
+
+HTTP://heppokofrontend.dev.
+
+h TTP://heppokofrontend.dev?

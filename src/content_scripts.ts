@@ -1,3 +1,6 @@
+import type { TrailingPunctuationMode } from './constants';
+import { getSaveData, getTrailingPunctuationPattern } from './utils';
+
 const getTextNodes = (context?: Node) => {
   const xPathResult = document.evaluate(
     '//text()',
@@ -6,27 +9,23 @@ const getTextNodes = (context?: Node) => {
     XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
     null,
   );
-  const result = [];
+  const result: Node[] = [];
   let { snapshotLength } = xPathResult;
 
   while (snapshotLength--) {
-    result.unshift(xPathResult.snapshotItem(snapshotLength));
+    const item = xPathResult.snapshotItem(snapshotLength);
+
+    if (item !== null) {
+      result.unshift(item);
+    }
   }
 
   return result;
 };
 
-const key = `@heppokofrontend<${performance.now()}>`;
+const key = `@heppokofrontend<${performance.now().toString()}>`;
+
 const getRegExp = (() => {
-  // const regExp = /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-@]+$/;
-  // const regExp = new RegExp(`(${protocol}${colon}${common})`);
-  // const regExpGlobal = new RegExp(
-  //   `(${protocol}${colon}${common})`,
-  //   'g',
-  // );
-  // const regExpSplitPattern = new RegExp(
-  //   `(${key}${protocol}${colon}${common})`,
-  // );
   const common = `\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-@]+`;
   const allDoubleSlash = {
     regExp: new RegExp(`([a-zA-Z]+:?${common})`),
@@ -59,9 +58,9 @@ const getRegExp = (() => {
     enableTtp,
     enableNoColon,
   }: {
-    enableTtp: boolean | undefined;
-    enableAllDoubleSlash: boolean | undefined;
-    enableNoColon: boolean | undefined;
+    enableTtp: boolean;
+    enableAllDoubleSlash: boolean;
+    enableNoColon: boolean;
   }) => {
     if (enableAllDoubleSlash) {
       return allDoubleSlash;
@@ -83,8 +82,22 @@ const getRegExp = (() => {
   };
 })();
 
-const stopPropagation = (e: MouseEvent) => {
-  e.stopPropagation();
+const stopPropagation = (event: MouseEvent) => {
+  event.stopPropagation();
+};
+
+const checkIsSkippableTarget = (textNode: Text) => {
+  const parent = textNode.parentElement;
+
+  if (parent === null) {
+    return true;
+  }
+
+  return (
+    parent.closest(
+      'a, button, input, textarea, summary, code, script, noscript, template, style, [contenteditable="true"], head',
+    ) !== null
+  );
 };
 
 const convertToLink = ({
@@ -93,152 +106,139 @@ const convertToLink = ({
   enableAllDoubleSlash,
   enableNoColon,
   useNewTab,
+  trailingPunctuationMode,
 }: {
   textNode: Text;
-  enableTtp: boolean | undefined;
-  enableAllDoubleSlash: boolean | undefined;
-  enableNoColon: boolean | undefined;
-  useNewTab: boolean | undefined;
+  enableTtp: boolean;
+  enableAllDoubleSlash: boolean;
+  enableNoColon: boolean;
+  useNewTab: boolean;
+  trailingPunctuationMode: TrailingPunctuationMode;
 }) => {
   const { regExp, regExpGlobal, regExpSplitPattern } = getRegExp({
     enableTtp,
     enableAllDoubleSlash,
     enableNoColon,
   });
+  const textContent = textNode.textContent;
 
-  if (!textNode.textContent?.trim() || !regExp.test(textNode.textContent)) {
+  if (textContent.trim() === '' || !regExp.test(textContent)) {
     return;
   }
 
-  const textContent = textNode.textContent.replace(regExpGlobal, `${key}$1`);
-  const result = textContent.split(regExpSplitPattern).filter(Boolean);
+  const marked = textContent.replace(regExpGlobal, `${key}$1`);
+  const parts = marked.split(regExpSplitPattern).filter((s) => s !== '');
   const fragment = document.createDocumentFragment();
 
-  result.forEach((text) => {
-    if (text.startsWith(key)) {
-      const a = document.createElement('a');
-      const urlString = text.replace(key, '');
-      let url = urlString;
-
-      if (enableTtp && url.startsWith('ttp')) {
-        url = `h${url}`;
-      }
-
-      if (enableNoColon && !url.includes('://')) {
-        url = url.replace('//', '://');
-      }
-
-      a.href = url;
-      a.textContent = urlString;
-      a.style.cssText = 'color: inherit !important;';
-      a.addEventListener('click', stopPropagation);
-
-      if (useNewTab) {
-        a.target = '_blank';
-      }
-
-      fragment.append(a);
-
-      return;
+  for (const text of parts) {
+    if (!text.startsWith(key)) {
+      fragment.append(text);
+      continue;
     }
 
-    fragment.append(text);
-  });
+    const a = document.createElement('a');
+    let urlString = text.slice(key.length);
+    let tail = '';
+    const trailingPattern = getTrailingPunctuationPattern(trailingPunctuationMode);
+
+    if (trailingPattern !== null) {
+      const punctuationMatch = trailingPattern.exec(urlString);
+
+      if (punctuationMatch !== null) {
+        tail = punctuationMatch[0];
+        urlString = urlString.slice(0, -tail.length);
+      }
+    }
+
+    let url = urlString;
+
+    if (enableTtp && url.startsWith('ttp')) {
+      url = `h${url}`;
+    }
+
+    if (enableNoColon && !url.includes('://')) {
+      url = url.replace('//', '://');
+    }
+
+    a.href = url;
+    a.textContent = urlString;
+    a.style.cssText = 'color: inherit !important;';
+    a.addEventListener('click', stopPropagation);
+
+    if (useNewTab) {
+      a.target = '_blank';
+    }
+
+    fragment.append(a);
+
+    if (tail !== '') {
+      fragment.append(tail);
+    }
+  }
 
   textNode.replaceWith(fragment);
 };
 
-const narrowDownToOnlyTopLevelNodeLayer = (elements: Node[]) => {
-  const result = [];
+const narrowDownToOnlyTopLevelNodeLayer = (elements: Node[]) =>
+  elements.filter((el) => !elements.some((other) => other !== el && other.contains(el)));
 
-  for (let i = 0; i < elements.length; i++) {
-    const currentElement = elements[i];
-    let isChild = false;
-
-    for (let j = 0; j < elements.length; j++) {
-      if (i !== j) {
-        const otherElement = elements[j];
-
-        if (otherElement.contains(currentElement)) {
-          isChild = true;
-          break;
-        }
-      }
-    }
-
-    if (!isChild) {
-      result.push(currentElement);
-    }
-  }
-
-  return result;
-};
-
-chrome.storage.local.get('saveData', (item) => {
-  const saveData = (item.saveData ?? {}) as SaveDataType;
-  const convert = (textNode: Node) => {
-    if (
-      textNode instanceof Text &&
-      !textNode.parentElement?.closest(
-        'a, button, input, textarea, summary, code, script, noscript, template, style, [contenteditable="true"], head',
-      )
-    ) {
+void (async () => {
+  const saveData = await getSaveData();
+  const convert = (node: Node) => {
+    if (node instanceof Text && !checkIsSkippableTarget(node)) {
       convertToLink({
-        textNode,
+        textNode: node,
         enableTtp: saveData.enableTtp,
         enableAllDoubleSlash: saveData.enableAllDoubleSlash,
         enableNoColon: saveData.enableNoColon,
         useNewTab: saveData.useNewTab,
+        trailingPunctuationMode: saveData.trailingPunctuationMode,
       });
     }
   };
 
-  const textNodes = getTextNodes();
+  for (const node of getTextNodes()) {
+    convert(node);
+  }
 
-  textNodes.forEach((textNode) => {
-    if (textNode) {
-      convert(textNode);
+  if (!saveData.observeDOM) {
+    return;
+  }
+
+  let debounceId: number | null = null;
+  const pendingRoots = new Set<Node>();
+  const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        pendingRoots.add(mutation.target);
+
+        if (debounceId !== null) {
+          clearTimeout(debounceId);
+        }
+
+        debounceId = window.setTimeout(() => {
+          const filteredElements = narrowDownToOnlyTopLevelNodeLayer([...pendingRoots]);
+
+          for (const root of filteredElements) {
+            for (const node of getTextNodes(root)) {
+              convert(node);
+            }
+          }
+
+          pendingRoots.clear();
+        }, 500);
+      }
+
+      if (mutation.type === 'characterData') {
+        convert(mutation.target);
+      }
     }
   });
 
-  if (saveData.observeDOM === true) {
-    let setTimeoutId = -1;
-    const elementSet = new Set<Node>();
-    const observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-          elementSet.add(mutation.target);
-          // 大量のNodeの変更は間引きしてまとめて処理する
-          clearTimeout(setTimeoutId);
-          setTimeoutId = window.setTimeout(() => {
-            const filteredElements = narrowDownToOnlyTopLevelNodeLayer([...elementSet]);
-
-            filteredElements.forEach((root) => {
-              const textNodes = getTextNodes(root);
-
-              textNodes.forEach((textNode) => {
-                if (textNode) {
-                  convert(textNode);
-                }
-              });
-            });
-
-            elementSet.clear();
-          }, 500);
-        }
-
-        if (mutation.type === 'characterData') {
-          convert(mutation.target);
-        }
-      }
-    });
-
-    // MutationObserverを開始
-    observer.observe(document.body, {
-      attributes: false,
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
-  }
-});
+  observer.observe(document.body, {
+    attributes: false,
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
+})();

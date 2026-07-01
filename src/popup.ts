@@ -1,130 +1,114 @@
-const defaultSaveData = {
-  enableTtp: false,
-  observeDOM: false,
-  enableAllDoubleSlash: false,
-  enableNoColon: false,
-  useNewTab: true,
-};
+import { STORAGE_KEY_SAVE_DATA, defaultSaveData, type SaveData } from './constants';
+import { checkIsBooleanSaveDataKey, checkIsTrailingPunctuationMode, getSaveData } from './utils';
 
-const STATE = {
-  saveData: defaultSaveData,
-};
+let currentSaveData: SaveData = { ...defaultSaveData };
+const checkboxes = document.querySelectorAll<HTMLInputElement>('input[data-option-type]');
+const selects = document.querySelectorAll<HTMLSelectElement>('select[data-option-type]');
 
-const getMessage = (key: string) => chrome.i18n.getMessage(key) || key;
-const isValidOptionType = (value: unknown): value is keyof SaveDataType => {
-  if (typeof value !== 'string') {
-    return false;
-  }
-
-  return value in defaultSaveData;
-};
-
-const checkboxes = document.querySelectorAll<HTMLInputElement>('[data-option-type]');
-const save = (newSaveData: SaveDataType) => {
-  const value = {
-    ...STATE.saveData,
-    ...newSaveData,
-  };
-
-  STATE.saveData = value;
-
+const syncFields = (saveData: SaveData) => {
   for (const checkbox of checkboxes) {
-    if (isValidOptionType(checkbox.dataset.optionType)) {
-      checkbox.checked = value[checkbox.dataset.optionType];
+    const optionKey = checkbox.dataset['optionType'];
+
+    if (checkIsBooleanSaveDataKey(optionKey)) {
+      checkbox.checked = saveData[optionKey];
     }
   }
 
-  chrome.storage.local.set({
-    saveData: value,
-  });
+  for (const select of selects) {
+    if (select.dataset['optionType'] === 'trailingPunctuationMode') {
+      select.value = saveData.trailingPunctuationMode;
+    }
+  }
+};
+
+const save = (patch: Partial<SaveData>) => {
+  currentSaveData = { ...currentSaveData, ...patch };
+
+  syncFields(currentSaveData);
+  void chrome.storage.local.set({ [STORAGE_KEY_SAVE_DATA]: currentSaveData });
 };
 
 const setLanguage = () => {
   const targets = document.querySelectorAll<HTMLElement>('[data-i18n]');
 
   for (const elm of targets) {
-    const { i18n } = elm.dataset;
+    const key = elm.dataset['i18n'];
 
-    if (!i18n) {
+    if (key === undefined || key === '') {
       continue;
     }
 
-    const textContent = getMessage(i18n);
+    const message = chrome.i18n.getMessage(key);
 
-    elm.textContent = textContent;
+    elm.textContent = message === '' ? key : message;
   }
 };
 
-const loadSaveData = async () => {
-  const getValue = <T>(key: string, callback: (items: Record<string, T | undefined>) => void) =>
-    new Promise<void>((resolve) => {
-      chrome.storage.local.get(key, (items) => {
-        callback(items);
-        resolve();
-      });
-    });
+const onCheckboxChange = (target: HTMLInputElement) => {
+  const optionKey = target.dataset['optionType'];
 
-  return Promise.all([
-    getValue<typeof defaultSaveData>('saveData', ({ saveData }) => {
-      for (const [key, value] of Object.entries<boolean>(saveData ?? defaultSaveData)) {
-        const checkbox = document.querySelector<HTMLInputElement>(`[data-option-type=${key}]`);
+  if (!checkIsBooleanSaveDataKey(optionKey)) {
+    return;
+  }
 
-        if (checkbox) {
-          checkbox.checked = value;
-        }
-      }
+  const nextValue = target.checked;
 
-      STATE.saveData = saveData ?? defaultSaveData;
-    }),
-  ]);
+  save({ [optionKey]: nextValue });
+
+  if (optionKey === 'enableAllDoubleSlash' && nextValue) {
+    save({ enableTtp: true, enableNoColon: true });
+
+    return;
+  }
+
+  if ((optionKey === 'enableTtp' || optionKey === 'enableNoColon') && !nextValue) {
+    save({ enableAllDoubleSlash: false });
+  }
 };
 
-const addEvent = () => {
-  const onchangeListener = (e: Event) => {
-    if (!(e.target instanceof HTMLInputElement)) {
-      return;
-    }
+const onSelectChange = (target: HTMLSelectElement) => {
+  if (target.dataset['optionType'] !== 'trailingPunctuationMode') {
+    return;
+  }
 
-    const { optionType } = e.target.dataset;
+  if (!checkIsTrailingPunctuationMode(target.value)) {
+    return;
+  }
 
-    if (isValidOptionType(optionType)) {
-      save({
-        [optionType]: e.target.checked,
-      });
+  save({ trailingPunctuationMode: target.value });
+};
 
-      switch (optionType) {
-        case 'enableAllDoubleSlash':
-          if (e.target.checked) {
-            save({
-              enableTtp: true,
-              enableNoColon: true,
-            });
-          }
+const onChange = (event: Event) => {
+  if (event.target instanceof HTMLInputElement) {
+    onCheckboxChange(event.target);
 
-          break;
+    return;
+  }
 
-        case 'enableTtp':
-        case 'enableNoColon':
-          if (!e.target.checked) {
-            save({
-              enableAllDoubleSlash: false,
-            });
-          }
-      }
-    }
-  };
+  if (event.target instanceof HTMLSelectElement) {
+    onSelectChange(event.target);
+  }
+};
 
+const attachEvents = () => {
   for (const checkbox of checkboxes) {
-    checkbox.addEventListener('change', onchangeListener);
+    checkbox.addEventListener('change', onChange);
+  }
+
+  for (const select of selects) {
+    select.addEventListener('change', onChange);
   }
 };
 
-setLanguage();
-loadSaveData().then(() => {
-  addEvent();
-});
+void (async () => {
+  currentSaveData = await getSaveData();
 
-// CSS Transitionの有効化
+  syncFields(currentSaveData);
+  setLanguage();
+  attachEvents();
+})();
+
+// CSS Transition の有効化
 setTimeout(() => {
-  document.body.dataset.state = 'loaded';
+  document.body.dataset['state'] = 'loaded';
 }, 300);
