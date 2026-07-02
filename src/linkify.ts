@@ -3,8 +3,8 @@ import { getTrailingPunctuationPattern } from './utils';
 
 export const getTextNodes = (context?: Node) => {
   const xPathResult = document.evaluate(
-    '//text()',
-    context ?? document,
+    './/text()',
+    context ?? document.body,
     null,
     XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
     null,
@@ -88,7 +88,7 @@ export const checkIsSkippableTarget = (textNode: Text) => {
 
   return (
     parent.closest(
-      'a, button, input, textarea, summary, code, script, noscript, template, style, [contenteditable="true"], head',
+      'a, button, input, textarea, summary, code, script, noscript, template, style, [contenteditable="true"]',
     ) !== null
   );
 };

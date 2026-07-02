@@ -295,14 +295,6 @@ describe('checkIsSkippableTarget', () => {
     expect(checkIsSkippableTarget(textNode)).toBe(true);
   });
 
-  it('skips text inside <head>', () => {
-    const textNode = document.createTextNode('sample');
-
-    document.head.appendChild(textNode);
-    expect(checkIsSkippableTarget(textNode)).toBe(true);
-    textNode.remove();
-  });
-
   it('skips text arbitrarily nested inside a skipped ancestor', () => {
     const anchor = document.createElement('a');
     const span = document.createElement('span');
@@ -337,20 +329,23 @@ describe('checkIsSkippableTarget', () => {
 });
 
 describe('getTextNodes', () => {
-  // Uses XPath "//text()" which always starts from the document root, so the
-  // context argument is a no-op in practice. This test pins that behavior so a
-  // future scoping fix (e.g. switching to ".//text()") is caught here rather
-  // than silently altering the MutationObserver debounce path.
-  it('returns document-wide text nodes in document order, ignoring context', () => {
+  beforeEach(() => {
     document.body.innerHTML =
       '<section id="a"><p>alpha</p></section><section id="b"><p>beta<em>gamma</em></p></section>';
+  });
+
+  it('scopes to descendant text nodes when a context is given', () => {
     const scope = document.getElementById('a');
 
     if (scope === null) {
       throw new Error('missing #a');
     }
 
-    expect(getTextNodes(scope).map((n) => n.textContent)).toEqual(['alpha', 'beta', 'gamma']);
+    expect(getTextNodes(scope).map((n) => n.textContent)).toEqual(['alpha']);
+  });
+
+  it('defaults to document.body when no context is given', () => {
+    expect(getTextNodes().map((n) => n.textContent)).toEqual(['alpha', 'beta', 'gamma']);
   });
 });
 
