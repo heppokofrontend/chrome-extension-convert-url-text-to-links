@@ -67,17 +67,59 @@ https://heppokofrontend.dev)!?
 
 ttp://heppokofrontend.dev.
 
+ttp://heppokofrontend.dev:
+
+ttp://heppokofrontend.dev?
+
+ttp://heppokofrontend.dev)
+
+ttp://heppokofrontend.dev...
+
+ttp://heppokofrontend.dev,
+
 ttps://heppokofrontend.dev?
 
 --- Trailing punctuation: No colon + punctuation ---
 
 http//heppokofrontend.dev.
 
+http//heppokofrontend.dev:
+
+http//heppokofrontend.dev?
+
+http//heppokofrontend.dev)
+
+http//heppokofrontend.dev...
+
 https//heppokofrontend.dev,
+
+--- Trailing punctuation: No h + No colon + punctuation ---
+
+ttp//heppokofrontend.dev.
+
+ttp//heppokofrontend.dev?
+
+ttps//heppokofrontend.dev)
+
+ttp//heppokofrontend.dev...
 
 --- Trailing punctuation: Other + punctuation ---
 
 hoge://heppokofrontend.dev.
+
+hoge://heppokofrontend.dev:
+
+hoge://heppokofrontend.dev?
+
+hoge://heppokofrontend.dev)
+
+hoge://heppokofrontend.dev...
+
+hoge//heppokofrontend.dev.
+
+hoge//heppokofrontend.dev,
+
+hoge//heppokofrontend.dev?
 
 HTTP://heppokofrontend.dev.
 
@@ -92,3 +134,13 @@ See https://en.wikipedia.org/wiki/Foo_(bar) for details.
 https://en.wikipedia.org/wiki/Foo_(bar).
 
 https://en.wikipedia.org/wiki/Foo_(bar):
+
+https://en.wikipedia.org/wiki/Foo_(bar)?
+
+--- Multiple URLs on one line ---
+
+See https://heppokofrontend.dev and https://example.com then stop.
+
+go to https://a.example.com or https://b.example.com/path?q=1
+
+prefix https://first.dev/ mid https://second.dev/ suffix.
