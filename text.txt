@@ -82,3 +82,13 @@ hoge://heppokofrontend.dev.
 HTTP://heppokofrontend.dev.
 
 h TTP://heppokofrontend.dev?
+
+--- Trailing punctuation: URL with internal parentheses ---
+
+https://en.wikipedia.org/wiki/Foo_(bar)
+
+See https://en.wikipedia.org/wiki/Foo_(bar) for details.
+
+https://en.wikipedia.org/wiki/Foo_(bar).
+
+https://en.wikipedia.org/wiki/Foo_(bar):

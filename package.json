@@ -12,13 +12,16 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/chrome": "0.2.0",
+    "@vitest/coverage-v8": "^4.1.9",
     "esbuild": "0.28.1",
     "eslint": "10.6.0",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.7.0",
+    "jsdom": "^29.1.1",
     "prettier": "3.9.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.62.0"
+    "typescript-eslint": "8.62.0",
+    "vitest": "^4.1.9"
   },
   "homepage": "https://github.com/heppokofrontend/chrome-extension-convert-url-text-to-links#readme",
   "license": "MIT",
@@ -37,6 +40,9 @@
     "format:check": "prettier . --check",
     "lint": "eslint src",
     "start": "npm run dev:content & npm run dev:popup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc"
   }
 }
