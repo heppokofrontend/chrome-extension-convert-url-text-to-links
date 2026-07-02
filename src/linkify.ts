@@ -151,7 +151,7 @@ export const convertToLink = ({
       url = `h${url}`;
     }
 
-    if (enableNoColon && !url.includes('://')) {
+    if (!url.includes('://')) {
       url = url.replace('//', '://');
     }
 

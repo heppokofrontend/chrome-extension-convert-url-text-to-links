@@ -755,7 +755,7 @@ describe('convertToLink', () => {
         label: 'no-colon arbitrary scheme',
         input: 'hoge//example.com',
         options: { enableAllDoubleSlash: true },
-        expected: [anchor('hoge//example.com', 'hoge//example.com')],
+        expected: [anchor('hoge://example.com', 'hoge//example.com')],
       },
       {
         label: 'uppercase HTTP + period trim',
