@@ -18,4 +18,4 @@ It is a browser extension that simply converts URLs in the text into links.
 2. Change settings as needed (check boxes)
 3. Enjoy surfing the web!
 
-Testing page: <https://heppokofrontend.dev/demo/chrome-extension-convert-url-text-to-links>
+Testing page: <https://raw.githubusercontent.com/heppokofrontend/chrome-extension-convert-url-text-to-links/refs/heads/main/text.txt>
