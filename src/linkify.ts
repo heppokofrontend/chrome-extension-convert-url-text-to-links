@@ -23,34 +23,27 @@ export const getTextNodes = (context?: Node) => {
   return result;
 };
 
-const key = `@heppokofrontend<${performance.now().toString()}>`;
-
 export const getRegExp = (() => {
   const common = `\\/\\/[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-@]+`;
   const allDoubleSlash = {
     regExp: new RegExp(`([a-zA-Z]+:?${common})`),
     regExpGlobal: new RegExp(`([a-zA-Z]+:?${common})`, 'g'),
-    regExpSplitPattern: new RegExp(`(${key}[a-zA-Z]+:?${common})`),
   };
   const ttpAndNoColon = {
     regExp: new RegExp(`(h?ttps?:?${common})`),
     regExpGlobal: new RegExp(`(h?ttps?:?${common})`, 'g'),
-    regExpSplitPattern: new RegExp(`(${key}h?ttps?:?${common})`),
   };
   const ttp = {
     regExp: new RegExp(`(h?ttps?:${common})`),
     regExpGlobal: new RegExp(`(h?ttps?:${common})`, 'g'),
-    regExpSplitPattern: new RegExp(`(${key}h?ttps?:${common})`),
   };
   const colon = {
     regExp: new RegExp(`(https?:?${common})`),
     regExpGlobal: new RegExp(`(https?:?${common})`, 'g'),
-    regExpSplitPattern: new RegExp(`(${key}https?:?${common})`),
   };
   const strict = {
     regExp: new RegExp(`(https?:${common})`),
     regExpGlobal: new RegExp(`(https?:${common})`, 'g'),
-    regExpSplitPattern: new RegExp(`(${key}https?:${common})`),
   };
 
   return ({
@@ -82,7 +75,7 @@ export const getRegExp = (() => {
   };
 })();
 
-export const stopPropagation = (event: MouseEvent) => {
+const stopPropagation = (event: MouseEvent) => {
   event.stopPropagation();
 };
 
@@ -115,7 +108,7 @@ export const convertToLink = ({
   useNewTab: boolean;
   trailingPunctuationMode: TrailingPunctuationMode;
 }) => {
-  const { regExp, regExpGlobal, regExpSplitPattern } = getRegExp({
+  const { regExp, regExpGlobal } = getRegExp({
     enableTtp,
     enableAllDoubleSlash,
     enableNoColon,
@@ -126,20 +119,22 @@ export const convertToLink = ({
     return;
   }
 
-  const marked = textContent.replace(regExpGlobal, `${key}$1`);
-  const parts = marked.split(regExpSplitPattern).filter((s) => s !== '');
+  const parts = textContent.split(regExpGlobal);
+  const trailingPattern = getTrailingPunctuationPattern(trailingPunctuationMode);
   const fragment = document.createDocumentFragment();
 
-  for (const text of parts) {
-    if (!text.startsWith(key)) {
-      fragment.append(text);
+  for (const [i, part] of parts.entries()) {
+    if (part === '') {
       continue;
     }
 
-    const a = document.createElement('a');
-    let urlString = text.slice(key.length);
+    if (i % 2 === 0) {
+      fragment.append(part);
+      continue;
+    }
+
+    let urlString = part;
     let tail = '';
-    const trailingPattern = getTrailingPunctuationPattern(trailingPunctuationMode);
 
     if (trailingPattern !== null) {
       const punctuationMatch = trailingPattern.exec(urlString);
@@ -159,6 +154,8 @@ export const convertToLink = ({
     if (enableNoColon && !url.includes('://')) {
       url = url.replace('//', '://');
     }
+
+    const a = document.createElement('a');
 
     a.href = url;
     a.textContent = urlString;
