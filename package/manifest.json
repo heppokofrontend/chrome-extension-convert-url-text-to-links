@@ -6,7 +6,7 @@
   "description": "__MSG_extDesc__",
   "default_locale": "en",
   "action": {
-    "default_icon": "images/icon-128.png",
+    "default_icon": "images/icon.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [
@@ -16,7 +16,7 @@
     }
   ],
   "icons": {
-    "128": "images/icon-128.png"
+    "128": "images/icon.png"
   },
   "permissions": ["storage"]
 }
