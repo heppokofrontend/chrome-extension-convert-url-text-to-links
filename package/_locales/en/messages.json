@@ -37,5 +37,26 @@
   },
   "checkbox_use_new_tab": {
     "message": "Open in a new tab."
+  },
+  "label_trailing_punctuation_mode": {
+    "message": "Trailing punctuation to exclude"
+  },
+  "desc_trailing_punctuation_mode": {
+    "message": "Trailing punctuation that follows a URL is kept as plain text instead of being part of the link."
+  },
+  "trailing_mode_none": {
+    "message": "None"
+  },
+  "trailing_mode_period": {
+    "message": "."
+  },
+  "trailing_mode_period_colon": {
+    "message": ". :"
+  },
+  "trailing_mode_period_colon_question": {
+    "message": ". : ?"
+  },
+  "trailing_mode_all": {
+    "message": ". : ? )"
   }
 }

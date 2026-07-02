@@ -37,5 +37,26 @@
   },
   "checkbox_use_new_tab": {
     "message": "別タブで開く"
+  },
+  "label_trailing_punctuation_mode": {
+    "message": "リンク末尾から除外する記号"
+  },
+  "desc_trailing_punctuation_mode": {
+    "message": "URL の直後に続く記号を URL に含めず、テキストとして残します。"
+  },
+  "trailing_mode_none": {
+    "message": "なし"
+  },
+  "trailing_mode_period": {
+    "message": "."
+  },
+  "trailing_mode_period_colon": {
+    "message": ". :"
+  },
+  "trailing_mode_period_colon_question": {
+    "message": ". : ?"
+  },
+  "trailing_mode_all": {
+    "message": ". : ? )"
   }
 }
