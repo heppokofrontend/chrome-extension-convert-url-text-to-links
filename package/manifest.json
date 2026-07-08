@@ -9,6 +9,9 @@
     "default_icon": "images/icon.png",
     "default_popup": "popup.html"
   },
+  "background": {
+    "service_worker": "worker.js"
+  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -18,5 +21,6 @@
   "icons": {
     "128": "images/icon.png"
   },
-  "permissions": ["storage"]
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": ["storage", "scripting"]
 }

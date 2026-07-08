@@ -12,6 +12,7 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/chrome": "0.2.0",
+    "@types/node": "^26.1.0",
     "@vitest/coverage-v8": "^4.1.9",
     "esbuild": "0.28.1",
     "eslint": "10.6.0",
@@ -31,15 +32,12 @@
     "url": "git+https://github.com/heppokofrontend/chrome-extension-convert-url-text-to-links.git"
   },
   "scripts": {
-    "build": "npm run typecheck && npm run build:content && npm run build:popup",
-    "build:content": "esbuild src/content_scripts.ts --bundle --minify --format=iife --target=chrome120 --outfile=package/content_scripts.js",
-    "build:popup": "esbuild src/popup.ts --bundle --minify --format=iife --target=chrome120 --outfile=package/popup.js",
-    "dev:content": "esbuild src/content_scripts.ts --bundle --format=iife --target=chrome120 --sourcemap=inline --outfile=package/content_scripts.js --watch",
-    "dev:popup": "esbuild src/popup.ts --bundle --format=iife --target=chrome120 --sourcemap=inline --outfile=package/popup.js --watch",
+    "build": "npm run typecheck && node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint": "eslint src",
-    "start": "npm run dev:content & npm run dev:popup",
+    "start": "npm run dev",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

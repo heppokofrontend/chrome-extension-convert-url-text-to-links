@@ -1,3 +1,4 @@
+import { INJECTED_MARKER_KEY } from './constants';
 import { getSaveData } from './utils';
 import {
   checkIsSkippableTarget,
@@ -7,6 +8,14 @@ import {
 } from './linkify';
 
 void (async () => {
+  const globalObject = window as typeof window & { [INJECTED_MARKER_KEY]?: boolean };
+
+  if (globalObject[INJECTED_MARKER_KEY] === true) {
+    return;
+  }
+
+  globalObject[INJECTED_MARKER_KEY] = true;
+
   const saveData = await getSaveData();
   const convert = (node: Node) => {
     if (node instanceof Text && !checkIsSkippableTarget(node)) {
