@@ -1,7 +1,7 @@
 {
   "name": "chrome-extension-convert-url-text-to-links",
   "description": "Convert URLs in the text into links.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "heppokofrontend",
   "allowScripts": {
     "esbuild@0.28.1": true
