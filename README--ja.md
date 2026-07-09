@@ -18,4 +18,4 @@
 2. 必要に応じて設定を変更します（チェックボックス）
 3. ネットサーフィンをお楽しみください
 
-動作テスト用ページ: <https://heppokofrontend.dev/demo/chrome-extension-convert-url-text-to-links>
+動作テスト用ページ: <https://raw.githubusercontent.com/heppokofrontend/chrome-extension-convert-url-text-to-links/refs/heads/main/text.txt>
