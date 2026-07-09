@@ -1,0 +1,1 @@
+"use strict";(()=>{var c=async()=>{let i=await chrome.tabs.query({url:["http://*/*","https://*/*"]});for(let t of i)if(t.id!==void 0)try{await chrome.scripting.executeScript({target:{tabId:t.id},files:["content_scripts.js"]})}catch{}};c();})();

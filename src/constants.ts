@@ -1,5 +1,7 @@
 export const STORAGE_KEY_SAVE_DATA = 'saveData';
 
+export const INJECTED_MARKER_KEY = '__heppokofrontend.convert-url-text-to-links.injected__';
+
 export const TRAILING_PUNCTUATION_MODES = [
   'none',
   'period',
